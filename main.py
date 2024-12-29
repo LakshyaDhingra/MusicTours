@@ -13,3 +13,15 @@ def scrape(url):
     response = requests.get(url, headers=HEADERS)
     source = response.text
     return source
+
+
+def extract(source):
+    extractor = selectorlib.Extractor.from_yaml_file("extract.yaml")
+    # returns dictionary
+    value = extractor.extract(source)["tours"]
+    return value
+
+
+scraped = scrape(URL)
+ext = extract(scraped)
+print(ext)
