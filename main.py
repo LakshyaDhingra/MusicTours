@@ -22,6 +22,36 @@ def extract(source):
     return value
 
 
+def send_email():
+    return None
+
+
+def store(extracted):
+    try:
+        with open("data.txt", "a") as file:
+            file.write(extracted + "\n")
+    except:
+        with open("data.txt", "w") as file:
+            file.write(extracted + "\n")
+
+
+def read_file(extracted):
+    try:
+        with open("data.txt", "r") as file:
+            file_content = file.read()
+    except:
+        with open("data.txt", "w") as file:
+            file.write(extracted + "\n")
+        with open("data.txt", "r") as file2:
+            file_content = file2.read()
+    return file_content
+
+
 scraped = scrape(URL)
 ext = extract(scraped)
-print(ext)
+ext_content = read_file(ext)
+
+if ext != "No upcoming tours":
+    if ext not in ext_content:
+        store(ext)
+        send_email()
