@@ -17,6 +17,7 @@ print(rows2)
 # insert new rows
 rows3 = [('Dogs', 'Dog City', '2088.10.18'),
          ('Cats', 'Cat City', '2088.10.19')]
+# executemany used for multiple rows
 cursor.executemany("INSERT INTO events VALUES(?,?,?)", rows3)
 connection.commit()
 
