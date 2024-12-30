@@ -1,6 +1,9 @@
 import requests
 import selectorlib
 from datetime import datetime
+import sqlite3
+
+connection = sqlite3.connect("temp_data.db")
 
 URL = "http://programmer100.pythonanywhere.com/"
 HEADERS = {
@@ -25,22 +28,9 @@ def extract(source):
 
 def store(extracted):
     now = datetime.now().strftime("%y-%m-%d-%H-%M-%S")
-    try:
-        with open("temp_data.txt", "a") as file:
-            file.write(f"{now}, {extracted}" + "\n")
-    except:
-        with open("temp_data.txt", "w") as file:
-            file.write(f"{now}, {extracted}" + "\n")
+    cursor = connection.cursor()
+    row = [now, extracted]
+    row = [item.strip() for item in row]
+    cursor.execute("INSERT INTO weather VALUES(?,?)", row)
+    connection.commit()
 
-
-def read_file(extracted):
-    now = datetime.now().strftime("%y-%m-%d-%H-%M-%S")
-    try:
-        with open("temp_data.txt", "r") as file:
-            file_content = file.read()
-    except:
-        with open("temp_data.txt", "w") as file:
-            file.write(f"{now}, {extracted}" + "\n")
-        with open("temp_data.txt", "r") as file2:
-            file_content = file2.read()
-    return file_content
